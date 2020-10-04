@@ -11,6 +11,7 @@ import {
   CardFooter,
   Form,
   FormField,
+  Layer,
   Text,
   TextInput,
   Heading
@@ -20,13 +21,14 @@ const Profile = ({ setAuth, setUserData }) => {
   // states
   const [usernameField, setUsernameField] = useState("");
   const [error, setError] = useState("");
+  const [show, setShow] = useState();
 
   useEffect(() => {
     setError("");
   }, [usernameField]);
 
   // submit change username
-  const handleChange = (e) => {
+  const updateUsername = (e) => {
     console.log("in");
     e.preventDefault();
 
@@ -36,15 +38,14 @@ const Profile = ({ setAuth, setUserData }) => {
       })
       .then(() => {
         // user account updated
+        setShow(false);
         setUserData(usernameField);
       })
       .catch((e) => {
-        console.error(e);
-        if (
-          e.toString() === "UsernameAlreadyExists: Username already exists."
-        ) {
-          setError("New username is taken");
-        }
+        console.log(e);
+        let error = e.toString();
+        error = error.substring(error.indexOf(":") + 1);
+        setError(error);
       });
   };
 
@@ -55,14 +56,18 @@ const Profile = ({ setAuth, setUserData }) => {
       .then(() => {
         // user marked for deletion
         setAuth(false);
+        setShow(false);
       })
-      .catch((e) => console.error(e));
+      .catch((e) => {
+        setShow(false);
+        console.error(e);
+      });
   };
 
   return (
     <Box width="medium">
         <Box margin={{top: "medium"}}>
-          <Form onSubmit={handleChange}>
+          <Form onSubmit={updateUsername}>
             <Card background="light-1">
               <CardBody pad="small">
                 <FormField
@@ -85,14 +90,14 @@ const Profile = ({ setAuth, setUserData }) => {
                 pad={{ vertical: "medium", horizontal: "medium" }}
                 background="light-2"
               >
-                <Button type="submit" size="small" primary label="Update" />
+                <Button onClick={() => setShow(true)} type="submit" size="small" primary label="Update" />
               </CardFooter>
             </Card>
           </Form>
         </Box>
         <Box margin={{top: "medium"}}>
           <Form onSubmit={handleDelete}>
-            <Card background="light-1" fill="true">
+            <Card background="light-1">
               <CardHeader pad="medium" color="primary">
                 <Heading level={4} margin="none" responsive={true}>
                   Delete account
@@ -109,7 +114,16 @@ const Profile = ({ setAuth, setUserData }) => {
                   color="status-critical"
                   primary
                   label="Delete"
+                  onClick={() => setShow(true)}
                 />
+                {show && (
+                  <Layer
+                    onEsc={() => setShow(false)}
+                    onClickOutside={() => setShow(false)}
+                  >
+                    <Heading level={3} color="primary" margin="large">Loading...</Heading>
+                  </Layer>
+                )}
               </CardFooter>
             </Card>
           </Form>

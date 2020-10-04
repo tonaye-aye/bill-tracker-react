@@ -25,7 +25,7 @@ const Navigation = ({ userData, auth, setAuth }) => {
   };
 
   return (
-    <Header pad="small" border="bottom">
+    <Header pad="small" border="bottom" background="white">
       <Box direction="row" align="center" gap="small">
         <Link to="/">
           <Button

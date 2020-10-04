@@ -14,6 +14,7 @@ import {
   Form,
   FormField,
   Heading,
+  Layer,
   Text,
   TextInput
 } from "grommet";
@@ -23,6 +24,7 @@ const Join = ({ setAuth, setUserData }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [show, setShow] = useState();
 
   // fires this function everytime 'username' or 'password' states are changed
   useEffect(() => {
@@ -40,17 +42,11 @@ const Join = ({ setAuth, setUserData }) => {
         setUserData(user.username);
       })
       .catch((e) => {
-        console.log(e.toString());
-        if (
-          e.toString() ===
-          `PasswordTooShort: Password too short. Must be a minimum of 6 characters.`
-        ) {
-          setError("Password must be 6 characters.");
-        } else if (
-          e.toString() === "UsernameAlreadyExists: Username already exists."
-        ) {
-          setError("Username is taken.");
-        }
+        setShow(false);
+        console.log(e);
+        let error = e.toString();
+        error = error.substring(error.indexOf(":") + 1);
+        setError(error);
       });
   };
 
@@ -96,7 +92,15 @@ const Join = ({ setAuth, setUserData }) => {
               pad={{ vertical: "medium", horizontal: "medium" }}
               background="light-2"
             >
-              <Button size="large" type="submit" label="Join" primary />
+              <Button size="large" onClick={() => setShow(true)} type="submit" label="Join" primary />
+              {show && (
+                <Layer
+                  onEsc={() => setShow(false)}
+                  onClickOutside={() => setShow(false)}
+                >
+                  <Heading level={3} color="primary" margin="large">Loading...</Heading>
+                </Layer>
+              )}
               <Button
                 size="large"
                 type="reset"

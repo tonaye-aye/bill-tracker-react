@@ -14,6 +14,7 @@ import {
   Form,
   FormField,
   Heading,
+  Layer,
   Text,
   TextInput
 } from "grommet";
@@ -23,6 +24,7 @@ const Login = ({ setAuth, setUserData }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [show, setShow] = useState();
 
   // fires this function everytime 'username' or 'password' states are changed
   useEffect(() => {
@@ -38,19 +40,14 @@ const Login = ({ setAuth, setUserData }) => {
       .then((user) => {
         setAuth(true);
         setUserData(user.username);
+        setShow(true);
       })
       .catch((e) => {
+        setShow(false);
         console.log(e);
-        if (
-          e.toString() ===
-          `UsernameOrPasswordMismatch: Username or password mismatch.`
-        ) {
-          setError("Incorrect username or password.");
-        } else if (
-          e.toString() === "UserPendingDeletion: User is pending deletion."
-        ) {
-          setError("Account has recently been deleted.");
-        }
+        let error = e.toString();
+        error = error.substring(error.indexOf(":") + 1);
+        setError(error);
       });
   };
 
@@ -96,7 +93,15 @@ const Login = ({ setAuth, setUserData }) => {
               pad={{ vertical: "medium", horizontal: "medium" }}
               background="light-2"
             >
-              <Button size="large" type="submit" label="Login" primary />
+              <Button size="large" onClick={() => setShow(true)} type="submit" label="Login" primary />
+              {show && (
+                <Layer
+                  onEsc={() => setShow(false)}
+                  onClickOutside={() => setShow(false)}
+                >
+                  <Heading level={3} color="primary" margin="large">Loading...</Heading>
+                </Layer>
+              )}
               <Button
                 size="large"
                 type="reset"

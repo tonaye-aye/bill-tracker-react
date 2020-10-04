@@ -72,7 +72,7 @@ function App() {
             <Route path="/bills">
               {auth ? (
                 <Layout title={userData}>
-                  <Bills />
+                  <Bills title={userData} />
                 </Layout>
               ) : (
                 <Redirect to="/login" />
