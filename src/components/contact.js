@@ -1,15 +1,13 @@
 import React from "react";
 
 // grommet
-import { Box, Heading } from "grommet";
+import { Heading } from "grommet";
 
 const Contact = () => {
   return (
-    <Box margin={{ top: "large" }}>
-      <Heading margin="none" responsive={true}>
-        Contact
-      </Heading>
-    </Box>
+    <Heading margin="none" responsive={true}>
+      Contact
+    </Heading>
   );
 };
 

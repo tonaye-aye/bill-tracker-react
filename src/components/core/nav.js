@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 // userbase
 import userbase from "userbase-js";
@@ -17,6 +18,7 @@ import {
 import { Home, Menu as MenuIcon } from "grommet-icons";
 
 const Navigation = ({ userData, auth, setAuth }) => {
+  const history = useHistory();
   const handleLogout = () => {
     userbase
       .signOut()
@@ -25,7 +27,7 @@ const Navigation = ({ userData, auth, setAuth }) => {
   };
 
   return (
-    <Header pad="small" border="bottom" background="white">
+    <Header pad="small" border="bottom">
       <Box direction="row" align="center" gap="small">
         <Link to="/">
           <Button
@@ -48,33 +50,57 @@ const Navigation = ({ userData, auth, setAuth }) => {
               dropProps={{ align: { top: "top", right: "right" } }}
               icon={<MenuIcon color="brand" />}
               items={[
-                { label: "This is", onClick: () => {} },
-                { label: "The Menu", onClick: () => {} },
-                { label: "Component", onClick: () => {} }
+                {
+                  label: "Bills",
+                  onClick: () => {
+                    let path = `bills`;
+                    history.push(path);
+                  }
+                },
+                {
+                  label: "Account",
+                  onClick: () => {
+                    let path = `account`;
+                    history.push(path);
+                  }
+                },
+                {
+                  label: "Logout",
+                  onClick: () => {
+                    if (auth) {
+                      handleLogout();
+                    }
+                  }
+                }
               ]}
             />
           ) : (
             <Nav direction="row" align="center">
               {auth && (
                 <Link to="/bills">
-                  <Button default label="Bills" color="brand" />
+                  <Button default size="small" label="Bills" color="brand" />
                 </Link>
               )}
               {!auth ? (
                 <Link to="/join">
-                  <Button label="Join" />
+                  <Button label="Join" size="small" />
                 </Link>
               ) : (
-                <Link to="/profile">
-                  <Button label="Profile" secondary />
+                <Link to="/account">
+                  <Button label="Account" size="small" secondary />
                 </Link>
               )}
               {!auth ? (
                 <Link to="/login">
-                  <Button primary label="Login" />
+                  <Button primary size="small" label="Login" />
                 </Link>
               ) : (
-                <Button plain onClick={handleLogout} label="Logout" />
+                <Button
+                  plain
+                  onClick={handleLogout}
+                  size="small"
+                  label="Logout"
+                />
               )}
             </Nav>
           )

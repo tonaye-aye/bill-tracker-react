@@ -1,15 +1,12 @@
 import React from "react";
 
 // grommet
-import { Box, Heading } from "grommet";
+import { Box } from "grommet";
 
-const DefaultLayout = ({ children, title }) => {
+const DefaultLayout = ({ children }) => {
   return (
-    <Box margin={{ vertical: "large" }}>
-      <Heading margin="none" responsive={true}>
-        {title}
-      </Heading>
-      {children}
+    <Box fill align="center" justify="center">
+      <Box width="medium">{children}</Box>
     </Box>
   );
 };

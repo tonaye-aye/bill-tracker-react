@@ -20,7 +20,8 @@ import Login from "./components/auth/login";
 import Join from "./components/auth/join";
 
 // pages
-import Profile from "./components/profile";
+import Account from "./components/account";
+import Landing from "./components/landing";
 
 // grommet
 import { Grommet, Main } from "grommet";
@@ -41,45 +42,51 @@ function App() {
     <Grommet theme={grommet} margin={0} full={true} background="whitesmoke">
       <Router>
         <Nav userData={userData} auth={auth} setAuth={setAuth} />
-        <Main fill align="center" justify="center" pad="medium">
+        <Main align="center" justify="center" pad="medium">
           <Switch>
             <Route path="/join">
               {!auth ? (
-                <Join setAuth={setAuth} setUserData={setUserData} />
+                <Layout>
+                  <Join setAuth={setAuth} setUserData={setUserData} />
+                </Layout>
               ) : (
-                <Redirect to="/profile" />
+                <Redirect to="/account" />
               )}
             </Route>
             <Route path="/login">
               {!auth ? (
-                <Login setAuth={setAuth} setUserData={setUserData} />
+                <Layout>
+                  <Login setAuth={setAuth} setUserData={setUserData} />
+                </Layout>
               ) : (
-                <Redirect to="/profile" />
+                <Redirect to="/account" />
               )}
             </Route>
-            <Route path="/profile">
+            <Route path="/account">
               {auth ? (
-                <Layout title={`${userData}'s profile`}>
-                  <Profile setAuth={setAuth} setUserData={setUserData} />
+                <Layout>
+                  <Account
+                    userData={userData}
+                    setAuth={setAuth}
+                    setUserData={setUserData}
+                  />
                 </Layout>
               ) : (
                 <Redirect to="/login" />
               )}
             </Route>
             <Route path="/contact">
-              <Contact />
+              <Layout>
+                <Contact />
+              </Layout>
             </Route>
             <Route path="/bills">
-              {auth ? (
-                <Layout title={userData}>
-                  <Bills title={userData} />
-                </Layout>
-              ) : (
-                <Redirect to="/login" />
-              )}
+              {auth ? <Bills userData={userData} /> : <Redirect to="/login" />}
             </Route>
             <Route path="/">
-              <Layout title={"Home"}>hello, welcome to billtones!</Layout>
+              <Layout>
+                <Landing auth={auth} />
+              </Layout>
             </Route>
           </Switch>
         </Main>

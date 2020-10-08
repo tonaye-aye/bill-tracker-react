@@ -1,10 +1,21 @@
 html {
   body {
     margin: 0;
-    .TOPVd, .gmYUTl, .hyMgtW {
+    .TOPVd,
+    .gmYUTl,
+    .hyMgtW {
       position: absolute;
       top: 0;
       width: 100%;
+    }
+    .evXPTg {
+      margin-top: 7px;
+      margin-bottom: 7px;
+    }
+    table {
+      svg {
+        cursor: pointer;
+      }
     }
   }
 }
