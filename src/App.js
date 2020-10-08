@@ -36,7 +36,7 @@ function App() {
   const [userData, setUserData] = useState("");
 
   // userbase init
-  userbase.init({ appId: "b7b4cca8-9aec-4832-a035-3a671b0c82ac" });
+  userbase.init({ appId: process.env.USERBASE_ID });
 
   return (
     <Grommet theme={grommet} margin={0} full={true} background="whitesmoke">
